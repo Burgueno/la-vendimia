@@ -1,6 +1,6 @@
 {
     "root": "dist/",
     "routes": {
-        "/**": "app/index.html"
+        "/**": "index.html"
     }
 }
