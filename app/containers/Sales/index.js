@@ -11,6 +11,7 @@ import {
   map,
 } from 'lodash';
 import Moment from 'moment';
+import Numeral from 'numeral';
 import { connect } from 'react-redux';
 import { createStructuredSelector } from 'reselect';
 import { browserHistory } from 'react-router';
@@ -71,9 +72,15 @@ export class Sales extends React.Component { // eslint-disable-line react/prefer
     const { sales } = this.state;
 
     let folio = '1';
+    const soldProducts = [];
     forEach(sales, (sale) => {
       const folioAux = parseInt(sale.folio, 10) + 1;
       folio = folioAux.toString();
+      forEach(sale.products, (product) => {
+        const description = product.description;
+        const quantity = product.quantity;
+        soldProducts.push({ description, quantity });
+      });
     });
 
     return (
@@ -88,7 +95,7 @@ export class Sales extends React.Component { // eslint-disable-line react/prefer
               color: '#fff',
             }}
             style={{ display: 'flex' }}
-            onClick={() => browserHistory.push({ pathname: '/ventas/nueva-venta', query: {}, state: { folio } })}
+            onClick={() => browserHistory.push({ pathname: '/ventas/nueva-venta', query: {}, state: { folio, soldProducts } })}
           />
         </AddContainer>
         <Subheader
@@ -124,7 +131,7 @@ export class Sales extends React.Component { // eslint-disable-line react/prefer
                   <TableRowColumn>{venta.folio}</TableRowColumn>
                   <TableRowColumn>{venta.clientId}</TableRowColumn>
                   <TableRowColumn>{venta.clientName}</TableRowColumn>
-                  <TableRowColumn>{`$ ${this.setTotalPrice(venta.products)}`}</TableRowColumn>
+                  <TableRowColumn>{Numeral(this.setTotalPrice(venta.products)).format('$ 0,0.00')}</TableRowColumn>
                   <TableRowColumn>{Moment(venta.date).format('L')}</TableRowColumn>
                   <TableRowColumn />
                 </TableRow>

@@ -229,6 +229,7 @@
     "material-ui": "^0.18.1",
     "minimist": "1.2.0",
     "moment": "2.8.1",
+    "numeral": "^2.0.6",
     "pouchdb-adapter-http": "^6.1.2",
     "pouchdb-adapter-idb": "^6.1.2",
     "pouchdb-replication": "^6.1.2",

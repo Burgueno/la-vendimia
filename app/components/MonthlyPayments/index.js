@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import { map } from 'lodash';
+import Numeral from 'numeral';
 import {
   Table,
   TableBody,
@@ -70,9 +71,9 @@ class MonthlyPayments extends React.Component { // eslint-disable-line react/pre
             map(plazos, (plazo, index) =>
               <TableRow key={index}>
                 <TableRowColumn>{`${plazo} ABONOS DE`}</TableRowColumn>
-                <TableRowColumn>{`$ ${this.setPayment(this.setTotalPrice(cashPrice, plazo), plazo)}`}</TableRowColumn>
-                <TableRowColumn>{`TOTAL A PAGAR $ ${this.setTotalPrice(cashPrice, plazo)}`}</TableRowColumn>
-                <TableRowColumn>{`SE AHORRA $ ${this.setSaving(this.setTotalPrice(cashPrice, plazo))}`}</TableRowColumn>
+                <TableRowColumn>{Numeral(this.setPayment(this.setTotalPrice(cashPrice, plazo), plazo)).format('$ 0,0.00')}</TableRowColumn>
+                <TableRowColumn>{`TOTAL A PAGAR ${Numeral(this.setTotalPrice(cashPrice, plazo)).format('$ 0,0.00')}`}</TableRowColumn>
+                <TableRowColumn>{`SE AHORRA ${Numeral(this.setSaving(this.setTotalPrice(cashPrice, plazo))).format('$ 0,0.00')}`}</TableRowColumn>
                 <TableRowColumn style={Styles.LastHeader}>
                   <Checkbox
                     checked={plazoSeleccionado === plazo}

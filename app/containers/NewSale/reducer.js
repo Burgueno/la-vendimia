@@ -36,19 +36,19 @@ const initialState = fromJS({
     {
       descripcion: 'Sala 3 Piezas',
       modelo: 'Conqueror',
-      existencia: 10,
+      existencia: 5,
       precio: 2000.00,
     },
     {
       descripcion: 'Comedor 6 Sillas',
       modelo: 'Carlos V',
-      existencia: 6,
+      existencia: 5,
       precio: 2520.00,
     },
     {
       descripcion: 'Comedor 4 Sillas',
       modelo: 'Julio Cesar',
-      existencia: 13,
+      existencia: 5,
       precio: 2200.00,
     },
   ],
@@ -60,7 +60,6 @@ const initialState = fromJS({
   plazos: [3, 6, 9, 12],
   period: 0,
   products: [],
-  folio: '1318',
 });
 
 function newSaleReducer(state = initialState, action) {

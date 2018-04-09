@@ -16,6 +16,7 @@ import {
   find,
   map,
 } from 'lodash';
+import Numeral from 'numeral';
 import { browserHistory } from 'react-router';
 import AutoComplete from 'material-ui/AutoComplete';
 import IconButton from 'material-ui/IconButton';
@@ -29,6 +30,7 @@ import {
   TableRowColumn,
 } from 'material-ui/Table';
 import TextField from 'material-ui/TextField';
+import Snackbar from 'material-ui/Snackbar';
 import makeSelectNewSale from './selectors';
 import {
   EndContainer,
@@ -53,6 +55,27 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
     cliente: '',
     articulo: '',
     siguiente: false,
+    open: false,
+    message: '',
+    contentStyle: {},
+    bodyStyle: {},
+  }
+
+  setMaxRange = (name) => {
+    const {
+      NewSale: {
+        articulos,
+      },
+      location: {
+        state: {
+          soldProducts,
+        },
+      },
+    } = this.props;
+    const existencia = articulos.find((x) => x.descripcion === name).existencia;
+    const cantidadFlag = !!find(soldProducts, { description: name });
+    const cantidad = cantidadFlag ? find(soldProducts, { description: name }).quantity : 0;
+    return existencia - cantidad;
   }
 
   setTotalPrice = (price) => {
@@ -70,16 +93,47 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
   };
 
   handleNewArticle = () => {
-    const { addProductAction, NewSale: { articulos } } = this.props;
+    const {
+      addProductAction,
+      NewSale: {
+        articulos,
+        products,
+      },
+    } = this.props;
     const { articulo } = this.state;
+    const art = find(articulos, { descripcion: articulo });
+    const prod = find(products, { description: articulo });
 
-    if (find(articulos, { descripcion: articulo })) {
+    if (art && !prod && this.setMaxRange(articulo) > 0) {
       const article = find(articulos, { descripcion: articulo });
       const total = this.setTotalPrice(article.precio);
       addProductAction(article.descripcion, article.modelo, total);
       this.setState({ articulo: '' });
+    } else if (prod) {
+      this.setState({
+        open: true,
+        message: 'El artículo ya se encuentra seleccionado, favor de verificar.',
+        contentStyle: { color: 'red' },
+        bodyStyle: { backgroundColor: '#eab8b8' },
+      });
+    } else if (this.setMaxRange(articulo) === 0) {
+      this.setState({
+        open: true,
+        message: 'El artículo seleccionado no cuenta con existencia, favor de verificar.',
+        contentStyle: { color: 'red' },
+        bodyStyle: { backgroundColor: '#eab8b8' },
+      });
     }
   }
+
+  handleRequestClose = () => {
+    this.setState({
+      open: false,
+      message: '',
+      contentStyle: {},
+      bodyStyle: {},
+    });
+  };
 
   handleDeleteArticle = (index) => {
     const { removeProductAction, NewSale: { products } } = this.props;
@@ -96,7 +150,19 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
   }
 
   handleNextStep = () => {
-    this.setState({ siguiente: true });
+    const { clientes } = this.props.NewSale;
+    const { cliente } = this.state;
+    const clientFlag = !!find(clientes, { nombre: cliente });
+    if (clientFlag) {
+      this.setState({ siguiente: true });
+    } else {
+      this.setState({
+        open: true,
+        message: 'Los datos ingresados no son correctos, favor de verificar.',
+        contentStyle: { color: 'red' },
+        bodyStyle: { backgroundColor: '#eab8b8' },
+      });
+    }
   };
 
   handleSave = async () => {
@@ -121,8 +187,16 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
     const date = Date();
     const db = await Database.get();
     db.sales.insert({ folio, clientId, clientName: cliente, date, products, period });
-    await resetAction();
-    browserHistory.goBack();
+    this.setState({
+      open: true,
+      message: 'Bien Hecho, Tu venta ha sido registrada correctamente.',
+      contentStyle: { color: '#088A08' },
+      bodyStyle: { backgroundColor: '#9eee9e' },
+    });
+    setTimeout(() => {
+      resetAction();
+      browserHistory.goBack();
+    }, 1500);
   }
 
   render() {
@@ -152,6 +226,10 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
       cliente,
       articulo,
       siguiente,
+      open,
+      message,
+      contentStyle,
+      bodyStyle,
     } = this.state;
 
     const clientFlag = !!find(clientes, { nombre: cliente });
@@ -177,15 +255,15 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
       <SubContainer>
         <PricesContainer>
           <PriceTitle>Enganche:</PriceTitle>
-          <Value>{deposit}</Value>
+          <Value>{Numeral(deposit).format('$ 0,0.00')}</Value>
         </PricesContainer>
         <PricesContainer>
           <PriceTitle>Bonificación Enganche:</PriceTitle>
-          <Value>{bonus}</Value>
+          <Value>{Numeral(bonus).format('$ 0,0.00')}</Value>
         </PricesContainer>
         <PricesContainer>
           <PriceTitle>Total:</PriceTitle>
-          <Value>{debit}</Value>
+          <Value>{Numeral(debit).format('$ 0,0.00')}</Value>
         </PricesContainer>
       </SubContainer>;
 
@@ -260,11 +338,13 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
                           name={`product-${index}`}
                           type={'number'}
                           defaultValue={product.quantity}
+                          min={1}
+                          max={this.setMaxRange(product.description)}
                           onChange={(event, value) => changeProductQuantityAction(index, value)}
                         />
                       </TableRowColumn>
-                      <TableRowColumn>{product.price}</TableRowColumn>
-                      <TableRowColumn>{product.amount}</TableRowColumn>
+                      <TableRowColumn>{Numeral(product.price).format('$ 0,0.00')}</TableRowColumn>
+                      <TableRowColumn>{Numeral(product.amount).format('$ 0,0.00')}</TableRowColumn>
                       <TableRowColumn style={Styles.LastHeader}>
                         <IconButton onClick={() => this.handleDeleteArticle(index)}>
                           <DeleteItem />
@@ -326,6 +406,14 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
                 />
           }
         </EndContainer>
+        <Snackbar
+          open={open}
+          message={message}
+          autoHideDuration={2000}
+          onRequestClose={this.handleRequestClose}
+          contentStyle={contentStyle}
+          bodyStyle={bodyStyle}
+        />
       </div>
     );
   }
