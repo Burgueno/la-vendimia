@@ -1,0 +1,50 @@
+[Mon, 09 Apr 2018 06:07:55 GMT] [info] [<0.000.0>] pouchdb-server has started on http://0.0.0.0:10102/
+[Mon, 09 Apr 2018 06:07:55 GMT] [info] [<0.000.0>] database is in-memory; no changes will be saved.
+[Mon, 09 Apr 2018 06:07:55 GMT] [info] [<0.000.0>] database files will be saved to /tmp/pouchdb-server/
+[Mon, 09 Apr 2018 06:07:55 GMT] [info] [<0.000.0>] navigate to http://0.0.0.0:10102/_utils for the Fauxton UI.
+[Mon, 09 Apr 2018 06:08:03 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET / 304
+[Mon, 09 Apr 2018 06:08:03 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /sales/_local/VPt1_pCP39YRedgxz5m7og%3D%3D? 404
+[Mon, 09 Apr 2018 06:08:03 GMT] [info] [<0.000.0>] 127.0.0.1 - - PUT /sales/_local/VPt1_pCP39YRedgxz5m7og%3D%3D 404
+[Mon, 09 Apr 2018 06:08:03 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /sales/_changes?style=all_docs&seq_interval=100&since=11&limit=100 404
+[Mon, 09 Apr 2018 06:08:11 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /sales/ 404
+[Mon, 09 Apr 2018 06:08:11 GMT] [info] [<0.000.0>] 127.0.0.1 - - PUT /sales/ 201
+[Mon, 09 Apr 2018 06:08:11 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET / 304
+[Mon, 09 Apr 2018 06:08:11 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET / 304
+[Mon, 09 Apr 2018 06:08:11 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /sales/_local/vpk.lVK83386Ug9BtER2JA%3D%3D? 404
+[Mon, 09 Apr 2018 06:08:11 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /sales/_local/VPt1_pCP39YRedgxz5m7og%3D%3D? 404
+[Mon, 09 Apr 2018 06:08:11 GMT] [info] [<0.000.0>] 127.0.0.1 - - PUT /sales/_local/VPt1_pCP39YRedgxz5m7og%3D%3D 201
+[Mon, 09 Apr 2018 06:08:11 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /sales/_changes?style=all_docs&seq_interval=100&since=0&limit=100 304
+[Mon, 09 Apr 2018 06:08:11 GMT] [info] [<0.000.0>] 127.0.0.1 - - POST /sales/_revs_diff 200
+[Mon, 09 Apr 2018 06:08:11 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /sales/_local/VPt1_pCP39YRedgxz5m7og%3D%3D? 200
+[Mon, 09 Apr 2018 06:08:12 GMT] [info] [<0.000.0>] 127.0.0.1 - - POST /sales/_bulk_docs 201
+[Mon, 09 Apr 2018 06:08:12 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /sales/_changes?style=all_docs&feed=longpoll&seq_interval=100&heartbeat=10000&since=0&limit=100 200
+[Mon, 09 Apr 2018 06:08:12 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /sales/_local/vpk.lVK83386Ug9BtER2JA%3D%3D? 404
+[Mon, 09 Apr 2018 06:08:12 GMT] [info] [<0.000.0>] 127.0.0.1 - - PUT /sales/_local/vpk.lVK83386Ug9BtER2JA%3D%3D 201
+[Mon, 09 Apr 2018 06:08:12 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /sales/_changes?style=all_docs&feed=longpoll&seq_interval=100&heartbeat=10000&since=1&limit=99 200
+[Mon, 09 Apr 2018 06:08:12 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /sales/_local/VPt1_pCP39YRedgxz5m7og%3D%3D? 304
+[Mon, 09 Apr 2018 06:08:12 GMT] [info] [<0.000.0>] 127.0.0.1 - - PUT /sales/_local/VPt1_pCP39YRedgxz5m7og%3D%3D 201
+[Mon, 09 Apr 2018 06:08:12 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /sales/_local/VPt1_pCP39YRedgxz5m7og%3D%3D? 200
+[Mon, 09 Apr 2018 06:08:12 GMT] [info] [<0.000.0>] 127.0.0.1 - - PUT /sales/_local/VPt1_pCP39YRedgxz5m7og%3D%3D 201
+[Mon, 09 Apr 2018 06:08:12 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /sales/_local/VPt1_pCP39YRedgxz5m7og%3D%3D? 200
+[Mon, 09 Apr 2018 06:08:12 GMT] [info] [<0.000.0>] 127.0.0.1 - - PUT /sales/_local/VPt1_pCP39YRedgxz5m7og%3D%3D 201
+[Mon, 09 Apr 2018 06:08:12 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /sales/_local/VPt1_pCP39YRedgxz5m7og%3D%3D? 200
+[Mon, 09 Apr 2018 06:08:12 GMT] [info] [<0.000.0>] 127.0.0.1 - - PUT /sales/_local/VPt1_pCP39YRedgxz5m7og%3D%3D 201
+[Mon, 09 Apr 2018 06:08:15 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /_all_dbs?_=1523250144916 200
+[Mon, 09 Apr 2018 06:08:15 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /_replicator?_=1523250144917 200
+[Mon, 09 Apr 2018 06:08:15 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /sales?_=1523250144919 200
+[Mon, 09 Apr 2018 06:08:15 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /_users?_=1523250144918 200
+[Mon, 09 Apr 2018 06:08:17 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /_utils/ 304
+[Mon, 09 Apr 2018 06:08:17 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /_utils/dashboard.assets/css/styles-a9623008fc27e79da2388441deeacfab.css 304
+[Mon, 09 Apr 2018 06:08:17 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /_utils/dashboard.assets/js/bundle-34997e32896293a1fa5d71f79eb1b4f7.js 304
+[Mon, 09 Apr 2018 06:08:18 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /_session 304
+[Mon, 09 Apr 2018 06:08:18 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /_session 304
+[Mon, 09 Apr 2018 06:08:18 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET / 304
+[Mon, 09 Apr 2018 06:08:18 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /_utils/dashboard.assets/img/pouchdb-site.png 304
+[Mon, 09 Apr 2018 06:08:18 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /_utils/dashboard.assets/fonts/fauxtonicon5.woff 304
+[Mon, 09 Apr 2018 06:08:18 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /_all_dbs?_=1523254098080 200
+[Mon, 09 Apr 2018 06:08:18 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /_all_dbs?startkey=%22%22&endkey=%22%E9%A6%99%22&limit=30&_=1523254098081 200
+[Mon, 09 Apr 2018 06:08:18 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /_replicator?_=1523254098082 200
+[Mon, 09 Apr 2018 06:08:18 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /_users?_=1523254098083 200
+[Mon, 09 Apr 2018 06:08:18 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /sales?_=1523254098084 200
+[Mon, 09 Apr 2018 06:08:18 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /_utils/dashboard.assets/fonts/fontawesome-webfont.woff 304
+[Mon, 09 Apr 2018 06:08:18 GMT] [info] [<0.000.0>] 127.0.0.1 - - GET /_utils/dashboard.assets/img/pouchdb-favicon.png 200

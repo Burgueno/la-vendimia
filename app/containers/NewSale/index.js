@@ -45,6 +45,7 @@ import {
   Styles,
 } from './StyledComponents';
 import * as NewSaleActions from './actions';
+import * as Database from '../../Database';
 // import messages from './messages';
 
 export class NewSale extends React.Component { // eslint-disable-line react/prefer-stateless-function
@@ -81,9 +82,9 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
   }
 
   handleDeleteArticle = (index) => {
-    const { removeProductAction, NewSale: { productos } } = this.props;
+    const { removeProductAction, NewSale: { products } } = this.props;
     removeProductAction(index);
-    if (productos.length === 1) {
+    if (products.length === 1) {
       this.setState({ siguiente: false });
     }
   }
@@ -98,9 +99,29 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
     this.setState({ siguiente: true });
   };
 
-  handleSave = () => {
-    const { resetAction } = this.props;
-    resetAction();
+  handleSave = async () => {
+    const {
+      resetAction,
+      NewSale: {
+        clientes,
+        products,
+        period,
+      },
+      location: {
+        state: {
+          folio,
+        },
+      },
+    } = this.props;
+    const {
+      cliente,
+    } = this.state;
+    const clientFlag = !!find(clientes, { nombre: cliente });
+    const clientId = clientFlag && find(clientes, { nombre: cliente }).clientId;
+    const date = Date();
+    const db = await Database.get();
+    db.sales.insert({ folio, clientId, clientName: cliente, date, products, period });
+    await resetAction();
     browserHistory.goBack();
   }
 
@@ -109,17 +130,21 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
       changeProductQuantityAction,
       setPaymentAction,
       NewSale: {
-        folio,
         clientes,
         articulos,
-        productos,
+        products,
         configuracion: {
           tasa,
           plazoMaximo,
           porcentajeEnganche,
         },
         plazos,
-        checkedValue,
+        period,
+      },
+      location: {
+        state: {
+          folio,
+        },
       },
     } = this.props;
 
@@ -142,13 +167,13 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
     });
 
     let totalAmount = 0;
-    forEach(productos, (producto) => {
-      totalAmount += producto.importe;
+    forEach(products, (producto) => {
+      totalAmount += producto.amount;
     });
     const deposit = (porcentajeEnganche / 100) * totalAmount;
     const bonus = deposit * ((tasa * plazoMaximo) / 100);
     const debit = totalAmount - deposit - bonus;
-    const totalPrice = !!productos.length &&
+    const totalPrice = !!products.length &&
       <SubContainer>
         <PricesContainer>
           <PriceTitle>Enganche:</PriceTitle>
@@ -226,20 +251,20 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
                 displayRowCheckbox={false}
               >
                 {
-                  map(productos, (product, index) =>
+                  map(products, (product, index) =>
                     <TableRow key={index}>
-                      <TableRowColumn>{product.descripcion}</TableRowColumn>
-                      <TableRowColumn>{product.modelo}</TableRowColumn>
+                      <TableRowColumn>{product.description}</TableRowColumn>
+                      <TableRowColumn>{product.model}</TableRowColumn>
                       <TableRowColumn>
                         <TextField
                           name={`product-${index}`}
                           type={'number'}
-                          defaultValue={product.cantidad}
+                          defaultValue={product.quantity}
                           onChange={(event, value) => changeProductQuantityAction(index, value)}
                         />
                       </TableRowColumn>
-                      <TableRowColumn>{product.precio}</TableRowColumn>
-                      <TableRowColumn>{product.importe}</TableRowColumn>
+                      <TableRowColumn>{product.price}</TableRowColumn>
+                      <TableRowColumn>{product.amount}</TableRowColumn>
                       <TableRowColumn style={Styles.LastHeader}>
                         <IconButton onClick={() => this.handleDeleteArticle(index)}>
                           <DeleteItem />
@@ -253,14 +278,14 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
           </SubContainer>
           {totalPrice}
           {
-            (!!productos.length && siguiente) &&
+            (!!products.length && siguiente) &&
             <MonthlyPayments
               total={debit}
               tasa={tasa}
               plazoMaximo={plazoMaximo}
               plazos={plazos}
               setPayment={setPaymentAction}
-              plazoSeleccionado={checkedValue}
+              plazoSeleccionado={period}
             />
           }
         </RegistrationContainer>
@@ -286,7 +311,7 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
                   color: '#fff',
                 }}
                 onClick={() => this.handleNextStep()}
-                disabled={!(cliente && !!productos.length)}
+                disabled={!(cliente && !!products.length)}
               /> :
                 <RaisedButton
                   label={'Guardar'}
@@ -297,7 +322,7 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
                     color: '#fff',
                   }}
                   onClick={() => this.handleSave()}
-                  disabled={!checkedValue}
+                  disabled={!period}
                 />
           }
         </EndContainer>
@@ -308,6 +333,7 @@ export class NewSale extends React.Component { // eslint-disable-line react/pref
 
 NewSale.propTypes = {
   NewSale: PropTypes.object,
+  location: PropTypes.object,
   addProductAction: PropTypes.func,
   removeProductAction: PropTypes.func,
   changeProductQuantityAction: PropTypes.func,

@@ -24,7 +24,7 @@
     "build": "cross-env NODE_ENV=production webpack --config internals/webpack/webpack.prod.babel.js --color -p --progress",
     "build:clean": "npm run test:clean && rimraf ./build",
     "build:dll": "node ./internals/scripts/dependencies.js",
-    "start": "cross-env NODE_ENV=development node server",
+    "start": "concurrently \"npm run server\" \"cross-env NODE_ENV=development node server\"",
     "start:tunnel": "cross-env NODE_ENV=development ENABLE_TUNNEL=true node server",
     "start:production": "npm run test && npm run build && npm run start:prod",
     "start:prod": "cross-env NODE_ENV=production node server",
@@ -43,7 +43,8 @@
     "test": "cross-env NODE_ENV=test jest --coverage",
     "test:watch": "cross-env NODE_ENV=test jest --watchAll",
     "coveralls": "cat ./coverage/lcov.info | coveralls",
-    "heroku-postbuild": "npm run build"
+    "heroku-postbuild": "npm run build",
+    "server": "pouchdb-server --host 0.0.0.0 -p 10102 -m -d /tmp/pouchdb-server/ -n true"
   },
   "lint-staged": {
     "*.js": "lint:eslint"
@@ -211,9 +212,10 @@
   },
   "dependencies": {
     "apollo-client": "^1.2.2",
-    "babel-polyfill": "6.20.0",
+    "babel-polyfill": "^6.20.0",
     "chalk": "^1.1.3",
     "compression": "1.6.2",
+    "concurrently": "^3.3.0",
     "cross-env": "3.1.3",
     "draft-js": "^0.10.1",
     "express": "4.14.0",
@@ -227,6 +229,10 @@
     "material-ui": "^0.18.1",
     "minimist": "1.2.0",
     "moment": "2.8.1",
+    "pouchdb-adapter-http": "^6.1.2",
+    "pouchdb-adapter-idb": "^6.1.2",
+    "pouchdb-replication": "^6.1.2",
+    "pouchdb-server": "^2.3.4",
     "react": "15.4.1",
     "react-apollo": "^1.2.0",
     "react-dom": "15.4.1",
@@ -242,6 +248,8 @@
     "redux-logger": "^3.0.1",
     "redux-saga": "0.14.0",
     "reselect": "2.5.4",
+    "rxdb": "^7.4.3",
+    "rxjs": "^5.5.8",
     "sanitize.css": "4.1.0",
     "styled-components": "^1.1.2",
     "warning": "3.0.0",

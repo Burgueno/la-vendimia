@@ -7,6 +7,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {
+  forEach,
   map,
 } from 'lodash';
 import Moment from 'moment';
@@ -31,12 +32,50 @@ import {
   AddCircle,
   Styles,
 } from './StyledComponents';
+import * as Database from '../../Database';
 
 Moment.locale('es');
 
 export class Sales extends React.Component { // eslint-disable-line react/prefer-stateless-function
+  constructor(props) {
+    super(props);
+    this.state = {
+      sales: [],
+    };
+    this.subs = [];
+  }
+
+  async componentDidMount() {
+    const db = await Database.get();
+
+    const sub = db.sales.find().$.subscribe((sales) => {
+      if (!sales) return;
+      this.setState({ sales });
+    });
+    this.subs.push(sub);
+  }
+
+  componentWillUnmount() {
+    this.subs.forEach((sub) => sub.unsubscribe());
+  }
+
+  setTotalPrice = (products) => {
+    let total = 0;
+    forEach(products, (product) => {
+      total += product.amount;
+    });
+    return total;
+  }
+
   render() {
-    const { ventas } = this.props.Sales;
+    const { sales } = this.state;
+
+    let folio = '1';
+    forEach(sales, (sale) => {
+      const folioAux = parseInt(sale.folio, 10) + 1;
+      folio = folioAux.toString();
+    });
+
     return (
       <Container>
         <AddContainer>
@@ -49,7 +88,7 @@ export class Sales extends React.Component { // eslint-disable-line react/prefer
               color: '#fff',
             }}
             style={{ display: 'flex' }}
-            onClick={() => browserHistory.push('/ventas/nueva-venta')}
+            onClick={() => browserHistory.push({ pathname: '/ventas/nueva-venta', query: {}, state: { folio } })}
           />
         </AddContainer>
         <Subheader
@@ -80,13 +119,13 @@ export class Sales extends React.Component { // eslint-disable-line react/prefer
             displayRowCheckbox={false}
           >
             {
-              map(ventas, (venta, index) =>
+              map(sales, (venta, index) =>
                 <TableRow key={index} style={Styles.TableRowHeaderB}>
                   <TableRowColumn>{venta.folio}</TableRowColumn>
-                  <TableRowColumn>{venta.clave}</TableRowColumn>
-                  <TableRowColumn>{venta.nombre}</TableRowColumn>
-                  <TableRowColumn>{`$ ${venta.total}`}</TableRowColumn>
-                  <TableRowColumn>{Moment(venta.fecha).format('L')}</TableRowColumn>
+                  <TableRowColumn>{venta.clientId}</TableRowColumn>
+                  <TableRowColumn>{venta.clientName}</TableRowColumn>
+                  <TableRowColumn>{`$ ${this.setTotalPrice(venta.products)}`}</TableRowColumn>
+                  <TableRowColumn>{Moment(venta.date).format('L')}</TableRowColumn>
                   <TableRowColumn />
                 </TableRow>
               )
@@ -100,7 +139,6 @@ export class Sales extends React.Component { // eslint-disable-line react/prefer
 
 Sales.propTypes = {
   Sales: PropTypes.object,
-  // dispatch: PropTypes.func.isRequired,
 };
 
 const mapStateToProps = createStructuredSelector({
